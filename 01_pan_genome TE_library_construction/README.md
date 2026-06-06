@@ -51,24 +51,13 @@ Prepare the following input files before running the workflow:
 First, remove tandem repeats and nested TE fragments from the curated SoyBase TE library.
 
 ```bash
-EDTA/util/cleanup_tandem.pl \
-  -f SoyBase_TE.curated.fa \
-  -misschar N \
-  -nc 50000 \
-  -nr 0.9 \
-  -minlen 100 \
-  -minscore 3000 \
-  -trf 1 \
-  -cleanN 1 \
-  > SoyBase_TE.curated.cln.fa
+EDTA/util/cleanup_tandem.pl -f SoyBase_TE.curated.fa -misschar N -nc 50000 -nr 0.9 -minlen 100 -minscore 3000 -trf 1 -cleanN 1 > SoyBase_TE.curated.cln.fa
 ```
 
 Then remove nested TE sequences:
 
 ```bash
-EDTA/util/cleanup_nested.pl \
-  -in SoyBase_TE.curated.cln.fa \
-  -threads 24
+EDTA/util/cleanup_nested.pl -in SoyBase_TE.curated.cln.fa -threads 24
 ```
 
 Use the resulting cleaned and non-redundant TE library as the curated seed library for EDTA. In the following commands, this final seed library is referred to as:
@@ -88,23 +77,13 @@ Because PanEDTA integrates TE candidates across multiple genomes, gene-like TE s
 #### 3.2.1 Generate a representative GFF3 file
 
 ```bash
-java -cp TBtools_JRE1.6.jar \
-  biocjava.bioDoer.GXFUtils.GXFToRepresentativeGXF \
-  --inGXF Wm82.gff3 \
-  --outRepresentativeGff3 Wm82.gff3.rep
+java -cp TBtools_JRE1.6.jar biocjava.bioDoer.GXFUtils.GXFToRepresentativeGXF --inGXF Wm82.gff3 --outRepresentativeGff3 Wm82.gff3.rep
 ```
 
 #### 3.2.2 Extract representative CDS sequences
 
 ```bash
-java -cp TBtools_JRE1.6.jar \
-  biocjava.bioIO.GFF.ExtractFeaturefromGFF3andGenome \
-  --inGtf Wm82.gff3.rep \
-  --inGenome Wm82.fasta \
-  --outFile Wm82.cds.rep \
-  --targetFeature CDS \
-  --targetIdTag Parent \
-  --onlyCheck false
+java -cp TBtools_JRE1.6.jar biocjava.bioIO.GFF.ExtractFeaturefromGFF3andGenome --inGtf Wm82.gff3.rep --inGenome Wm82.fasta --outFile Wm82.cds.rep --targetFeature CDS --targetIdTag Parent --onlyCheck false
 ```
 
 ---
@@ -114,13 +93,7 @@ java -cp TBtools_JRE1.6.jar \
 Run EDTA for each genome using the curated seed TE library and the corresponding representative CDS file.
 
 ```bash
-EDTA.pl \
-  --genome Wm82.fasta \
-  --cds Wm82.cds.rep \
-  --curatedlib SoyBase_TE.curated_redup.fa \
-  --anno 1 \
-  --u 1.5e-8 \
-  --threads 48
+EDTA.pl --genome Wm82.fasta --cds Wm82.cds.rep --curatedlib SoyBase_TE.curated_redup.fa --anno 1 --u 1.5e-8 --threads 48
 ```
 
 Repeat this step for all genomes included in the pan-genome analysis.
@@ -142,10 +115,7 @@ b.fasta
 Run PanEDTA:
 
 ```bash
-bash panEDTA.sh \
-  -g genome.list \
-  -c Wm82.cds.rep \
-  -t 64
+bash panEDTA.sh -g genome.list -c Wm82.cds.rep -t 64
 ```
 
 The PanEDTA output library is referred to as:
@@ -171,17 +141,13 @@ PAN_TELIB=pan.TElib.fa
 Use case-insensitive matching to capture both `unknown` and `Unknown` in TE headers.
 
 ```bash
-grep -i "unknown" "${PAN_TELIB}" | \
-  sed 's/^>//' \
-  > TE_unknown.id
+grep -i "unknown" "${PAN_TELIB}" | sed 's/^>//' > TE_unknown.id
 ```
 
 Summarize the unknown TE categories:
 
 ```bash
-cut -d'#' -f2 TE_unknown.id | \
-  sort | \
-  uniq -c
+cut -d'#' -f2 TE_unknown.id | sort | uniq -c
 ```
 
 Example output:
@@ -195,49 +161,24 @@ Example output:
 Extract all unknown TE sequences:
 
 ```bash
-seqkit grep \
-  -f TE_unknown.id \
-  "${PAN_TELIB}" \
-  -o TE_unknown.fa
+seqkit grep -f TE_unknown.id "${PAN_TELIB}" -o TE_unknown.fa
 ```
 
 #### 3.5.2 Split unknown TE sequences by major TE order
 
 ```bash
-seqkit grep \
-  -r \
-  -p 'LTR' \
-  TE_unknown.fa \
-  -o TE_LTR_unknown.fa
+seqkit grep -r -p 'LTR' TE_unknown.fa -o TE_LTR_unknown.fa
+seqkit grep -r -p 'SINE' TE_unknown.fa -o TE_SINE_unknown.fa
 
-seqkit grep \
-  -r \
-  -p 'SINE' \
-  TE_unknown.fa \
-  -o TE_SINE_unknown.fa
-
-seqkit grep \
-  -r \
-  -p 'LINE' \
-  TE_unknown.fa \
-  -o TE_LINE_unknown.fa
+seqkit grep -r -p 'LINE' TE_unknown.fa -o TE_LINE_unknown.fa
 ```
 
 #### 3.5.3 Retain known TE sequences
 
 ```bash
-grep '^>' "${PAN_TELIB}" | \
-  grep -vi "unknown" | \
-  sed 's/^>//' \
-  > TE_known.id
-
-seqkit grep \
-  -f TE_known.id \
-  "${PAN_TELIB}" \
-  -o TE_known.fa
+grep '^>' "${PAN_TELIB}" | grep -vi "unknown" | sed 's/^>//' > TE_known.id
+seqkit grep -f TE_known.id "${PAN_TELIB}" -o TE_known.fa
 ```
-
----
 
 ### 3.6 Download and prepare the DeepTE plant model
 
@@ -266,34 +207,19 @@ DEEPTE_MODEL=/tool/DeepTE/Plants_model
 #### SINE
 
 ```bash
-python DeepTE.py \
-  -i TE_SINE_unknown.fa \
-  -sp P \
-  -m_dir "${DEEPTE_MODEL}" \
-  -fam SINE \
-  > DeepTE_SINE.log 2>&1
+python DeepTE.py -i TE_SINE_unknown.fa -sp P -m_dir "${DEEPTE_MODEL}" -fam SINE > DeepTE_SINE.log 2>&1
 ```
 
 #### LINE
 
 ```bash
-python DeepTE.py \
-  -i TE_LINE_unknown.fa \
-  -sp P \
-  -m_dir "${DEEPTE_MODEL}" \
-  -fam LINE \
-  > DeepTE_LINE.log 2>&1
+python DeepTE.py -i TE_LINE_unknown.fa -sp P -m_dir "${DEEPTE_MODEL}" -fam LINE > DeepTE_LINE.log 2>&1
 ```
 
 #### LTR
 
 ```bash
-python DeepTE.py \
-  -i TE_LTR_unknown.fa \
-  -sp P \
-  -m_dir "${DEEPTE_MODEL}" \
-  -fam LTR \
-  > DeepTE_LTR.log 2>&1
+python DeepTE.py -i TE_LTR_unknown.fa -sp P -m_dir "${DEEPTE_MODEL}" -fam LTR > DeepTE_LTR.log 2>&1
 ```
 
 The following commands assume that the DeepTE-classified FASTA files are named as follows:
@@ -338,12 +264,7 @@ sed -i 's/unknown__ClassI_LTR/unknown/1' LTR_DeepTE.fasta
 Merge the known TE sequences and the DeepTE-reclassified unknown TE sequences into the final pan-genome TE library.
 
 ```bash
-cat \
-  TE_known.fa \
-  LTR_DeepTE.fasta \
-  SINE_DeepTE.fasta \
-  LINE_DeepTE.fasta \
-  > panTE_DeepTE_final.lib.fa
+cat TE_known.fa LTR_DeepTE.fasta SINE_DeepTE.fasta LINE_DeepTE.fasta > panTE_DeepTE_final.lib.fa
 ```
 
 The final TE library is:
@@ -359,30 +280,13 @@ panTE_DeepTE_final.lib.fa
 Use RepeatMasker with the final pan-genome TE library.
 
 ```bash
-RepeatMasker \
-  -e ncbi \
-  -pa 24 \
-  -q \
-  -div 40 \
-  -lib panTE_DeepTE_final.lib.fa \
-  -cutoff 225 \
-  -gff \
-  Wm82.mod.panEDTA \
-  > /dev/null
+RepeatMasker -e ncbi -pa 24 -q -div 40 -lib panTE_DeepTE_final.lib.fa -cutoff 225 -gff Wm82.mod.panEDTA > /dev/null
 ```
 
 Then run the final EDTA annotation step using the RepeatMasker output.
 
 ```bash
-EDTA.pl \
-  --genome Wm82.fasta \
-  -t 48 \
-  --step final \
-  --anno 1 \
-  --curatedlib panTE_DeepTE_final.lib.fa \
-  --cds Wm82.cds.rep \
-  --rmout Wm82.mod.panEDTA.out \
-  --overwrite 1
+EDTA.pl --genome Wm82.fasta -t 48 --step final --anno 1 --curatedlib panTE_DeepTE_final.lib.fa --cds Wm82.cds.rep --rmout Wm82.mod.panEDTA.out --overwrite 1
 ```
 
 Repeat this re-annotation step for all genomes included in the pan-genome analysis.
