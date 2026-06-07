@@ -19,8 +19,6 @@ The workflow consists of five major steps:
 The following software and scripts are required:
 
 - [EDTA](https://github.com/oushujun/EDTA)
-- `cleanup_tandem.pl` and `cleanup_nested.pl` from the EDTA utility directory
-- `panEDTA.sh`
 - TBtools or TBtools command-line utilities
 - `seqkit`
 - DeepTE or another TE classification tool
@@ -319,11 +317,3 @@ Repeat this re-annotation step for all genomes included in the pan-genome analys
 6. **Use the correct RepeatMasker input.** `Wm82.mod.panEDTA` represents the genome sequence file used for RepeatMasker in this workflow. Replace it with the corresponding modified genome file for each accession.
 
 ---
-
-## 6. Suggested citation in downstream analysis
-
-When using the final pan-genome TE library in downstream analyses, report the library file name and the major construction steps, for example:
-
-```text
-A soybean pan-genome TE library was constructed by integrating EDTA-based genome-level TE annotations across multiple soybean assemblies using PanEDTA. Unknown TE sequences in the pan-genome library were further reclassified using DeepTE, and the final curated pan-genome TE library was used to re-annotate each genome with RepeatMasker and EDTA.
-```
