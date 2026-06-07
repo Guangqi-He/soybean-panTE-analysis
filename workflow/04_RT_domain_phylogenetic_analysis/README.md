@@ -103,6 +103,5 @@ awk 'BEGIN{OFS="\t"} {
 
 - Copia subfamilies can include SIRE, Ivana, Ikeros, TAR, and Ale.
 - Gypsy subfamilies can include CRM, Athila, Reina, Ogre, and Tekay.
-- The original full analysis merged representative RT domains across ecotypes before sampling and tree construction.
 - The example above intentionally uses one genome and two subfamilies to keep the workflow clear and reproducible.
 
