@@ -157,11 +157,3 @@ grep -v '^#' population.TAP_TIP.vep.annotation.txt \
   | sort -u \
   > population.TAP_TIP.vep.annotation.clean.tsv
 ```
-
-## Notes
-
-- Deletion-derived TE variants are annotated by direct overlap with the reference TE BED file.
-- Insertion-derived TE variants are annotated by classifying inserted sequences with RepeatMasker and the pan-genome TE library.
-- The duplicated VEP command and the inconsistent `47soyTEP` filename in the original notes were removed here.
-- The commands above use one genome as an alignment example, while population-level genotype summarization requires a population VCF.
-
