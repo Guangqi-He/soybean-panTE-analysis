@@ -337,11 +337,3 @@ STAR \
   --outFilterMatchNminOverLread 0.5 \
   --outFilterIntronMotifs RemoveNoncanonical
 ```
-
-## Notes
-
-- The mini linear pangenome is used to reduce reference bias when comparing epigenomic signals between Wm82 and W05.
-- Insertions specific to W05 and W82 are represented as deletion intervals after each genome is aligned back to the mini linear pangenome.
-- The original notes included a missing command when extracting `W82_ins.bed`; this README uses the same corrected deletion-extraction logic for both Wm82 and W05 VCF files.
-- The `bcftools consensus` command uses the filtered insertion VCF directly and does not use the BAM filename as a sample name.
-
