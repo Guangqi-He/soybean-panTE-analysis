@@ -172,11 +172,3 @@ expressed_te <- cpm %>%
 
 write_tsv(expressed_te, "expressed_TE_families_CPM_gt1.tsv")
 ```
-
-## Notes
-
-- STAR multimapping parameters are retained for TE expression analysis because TE-derived reads may align to multiple related copies.
-- TE GTF entries should not overlap before running TEcount.
-- The original command `> *bed` was replaced with an explicit output filename to avoid shell expansion errors.
-- The BAM output was changed to coordinate-sorted BAM because `TEcount --sortByPos` expects position-sorted input.
-
