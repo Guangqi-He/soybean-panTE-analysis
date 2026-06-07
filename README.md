@@ -16,8 +16,7 @@ This repository provides selected example data, custom scripts, and step-by-step
 - `scripts/`  
   Custom scripts used for TE-related analyses, data processing, statistical analysis, and figure generation.
 
-- `01_pan_genome_TE_library_construction/`  
-  Workflow for constructing the *Glycine* pan-genome TE library, including TE library cleaning, genome-level TE annotation, pan-genome TE library generation, and reclassification of unknown TE families.
+- `01_pan_genome_TE_library_construction/`: Workflow for constructing the *Glycine* pan-genome TE library, including TE library cleaning, genome-level TE annotation, pan-genome TE library generation, and reclassification of unknown TE families.
 
 - `02_TE_library_benchmark/`  
   Scripts and notes for benchmarking the pan-genome TE library against existing soybean TE resources and evaluating annotation performance.
