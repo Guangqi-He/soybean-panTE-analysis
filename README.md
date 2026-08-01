@@ -16,8 +16,9 @@ This repository provides selected example data, custom scripts, and step-by-step
 - [05_TE_distance_to_TSS_and_genes](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/05_TE_distance_to_TSS_and_genes): Characterization of TE distributions relative to genes and TSSs.
 - [06_syntenic_diversity](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/06_syntenic_diversity): Quantification of syntenic diversity.
 - [07_TAP_TIP_identification](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/07_TAP_TIP_identification): Identification of TE absence and insertion polymorphisms.
-- [08_epigenetic_analysis](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/08_epigenetic_analysis): Integration of TE-derived variants with epigenetic data.
-- [09_TE_expression_analysis](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/09_TE_expression_analysis): Quantification of TE family expression.
+- [08_eQTL_analysis](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/08_eQTL_analysis): eQTL analysis of TAPs/TIPs.
+- [09_epigenetic_analysis](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/09_epigenetic_analysis): Integration of TE-derived variants with epigenetic data.
+- [10_TE_expression_analysis](https://github.com/Guangqi-He/soybean-panTE-analysis/tree/main/workflow/10_TE_expression_analysis): Quantification of TE family expression.
 - `data/`: Selected example datasets and processed tables used to demonstrate the analysis workflow.
 - `scripts/`: Custom scripts used for TE-related analyses.
 
